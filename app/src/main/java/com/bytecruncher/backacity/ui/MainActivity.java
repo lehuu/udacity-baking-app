@@ -1,8 +1,10 @@
-package com.bytecruncher.backacity;
+package com.bytecruncher.backacity.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.bytecruncher.backacity.R;
 
 public class MainActivity extends AppCompatActivity {
 
