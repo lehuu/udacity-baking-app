@@ -2,6 +2,7 @@ package com.bytecruncher.backacity.viewmodel;
 
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.bytecruncher.backacity.data.RecipeRepository;
@@ -13,17 +14,18 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainViewModel extends ViewModel {
     private RecipeRepository mRepository;
-    private List<Recipe> mRecipes;
+    private MutableLiveData<List<Recipe>> mRecipes = new MutableLiveData<>();
 
     public MainViewModel() {
         mRepository = new RecipeRepository();
         mRepository.getRecipes()
                 .subscribeOn(Schedulers.io())
                 .doOnSuccess(recipes -> {
-                    mRecipes = recipes;
-                    for (Recipe recipe : mRecipes) {
-                        Log.d("RECIPES", recipe.toString());
-                    }
+                    mRecipes.postValue(recipes);
                 }).subscribe();
+    }
+
+    public MutableLiveData<List<Recipe>> getRecipes() {
+        return mRecipes;
     }
 }
