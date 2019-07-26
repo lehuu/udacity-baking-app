@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Backacity</string>
+    <string name="servings">Servings: %d</string>
 </resources>

@@ -3,6 +3,7 @@ package com.bytecruncher.backacity.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,7 +46,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_name)
         TextView mNameTextView;
-
+        @BindView(R.id.tv_servings)
+        TextView mServingsTextView;
+        @BindView(R.id.iv_image)
+        ImageView mImageView;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,6 +58,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         void bindView(Recipe recipe) {
             mNameTextView.setText(recipe.getName());
+            String servings = this.itemView.getResources().getString(R.string.servings, recipe.getServings());
+            mServingsTextView.setText(servings);
         }
     }
 }
