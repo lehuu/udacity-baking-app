@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.bytecruncher.backacity.R;
 import com.bytecruncher.backacity.model.Recipe;
 import com.bytecruncher.backacity.viewmodel.MainViewModel;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-        mAdapter = new RecipeAdapter();
+        mAdapter = new RecipeAdapter(Glide.with(this));
         recipeRecyclerView.setAdapter(mAdapter);
 
         mMainViewModel.getRecipes().observe(this, recipes -> {

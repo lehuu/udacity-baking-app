@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.RequestManager;
 import com.bytecruncher.backacity.R;
 import com.bytecruncher.backacity.model.Recipe;
 
@@ -19,6 +20,11 @@ import butterknife.ButterKnife;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
     private List<Recipe> mRecipes;
+    private final RequestManager mGlide;
+
+    public RecipeAdapter(RequestManager glide) {
+        this.mGlide = glide;
+    }
 
     public void setRecipes(List<Recipe> recipes) {
         this.mRecipes = recipes;
@@ -46,8 +52,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tv_name)
         TextView mNameTextView;
-        @BindView(R.id.tv_servings)
-        TextView mServingsTextView;
         @BindView(R.id.iv_image)
         ImageView mImageView;
 
@@ -58,8 +62,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
         void bindView(Recipe recipe) {
             mNameTextView.setText(recipe.getName());
-            String servings = this.itemView.getResources().getString(R.string.servings, recipe.getServings());
-            mServingsTextView.setText(servings);
+            mGlide
+                    .load(recipe.getImage())
+                    .error(R.drawable.ic_recipe)
+                    .into(mImageView);
         }
     }
 }
