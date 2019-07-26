@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bytecruncher.backacity.R;
@@ -35,9 +36,18 @@ public class MainActivity extends AppCompatActivity {
 
         mAdapter = new RecipeAdapter(Glide.with(this));
         recipeRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(position -> {
+            //Open the detail of the clicked Recipe
+            if(mMainViewModel.getRecipes().getValue() != null) {
+                Recipe recipe = mMainViewModel.getRecipes().getValue().get(position);
+                Log.d("Clicked", recipe.toString());
+            }
+        });
 
         mMainViewModel.getRecipes().observe(this, recipes -> {
             mAdapter.setRecipes(recipes);
         });
+
+
     }
 }

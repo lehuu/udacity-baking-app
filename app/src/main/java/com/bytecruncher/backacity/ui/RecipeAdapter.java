@@ -21,14 +21,19 @@ import butterknife.ButterKnife;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
     private List<Recipe> mRecipes;
     private final RequestManager mGlide;
+    private OnItemClickListener mOnItemClickListener;
 
-    public RecipeAdapter(RequestManager glide) {
+    RecipeAdapter(RequestManager glide) {
         this.mGlide = glide;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
+    void setRecipes(List<Recipe> recipes) {
         this.mRecipes = recipes;
         notifyDataSetChanged();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -49,7 +54,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         return mRecipes == null ? 0 : mRecipes.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    interface OnItemClickListener {
+        void onClick(int position);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tv_name)
         TextView mNameTextView;
         @BindView(R.id.iv_image)
@@ -58,6 +67,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
         }
 
         void bindView(Recipe recipe) {
@@ -66,6 +76,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
                     .load(recipe.getImage())
                     .error(R.drawable.ic_recipe)
                     .into(mImageView);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(mOnItemClickListener!= null){
+                mOnItemClickListener.onClick(getAdapterPosition());
+            }
         }
     }
 }
