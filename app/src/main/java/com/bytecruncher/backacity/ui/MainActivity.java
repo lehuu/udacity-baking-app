@@ -1,19 +1,16 @@
 package com.bytecruncher.backacity.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bytecruncher.backacity.R;
 import com.bytecruncher.backacity.model.Recipe;
 import com.bytecruncher.backacity.viewmodel.MainViewModel;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
             //Open the detail of the clicked Recipe
             if(mMainViewModel.getRecipes().getValue() != null) {
                 Recipe recipe = mMainViewModel.getRecipes().getValue().get(position);
-                Log.d("Clicked", recipe.toString());
+                Intent intent = new Intent(this, RecipeDetailActivity.class);
+                intent.putExtra(Intent.EXTRA_UID, recipe);
+                startActivity(intent);
             }
         });
 
