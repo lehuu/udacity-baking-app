@@ -11,13 +11,14 @@ import com.bytecruncher.backacity.model.Recipe;
 import com.bytecruncher.backacity.viewmodel.RecipeDetailViewModel;
 
 public class RecipeDetailActivity extends AppCompatActivity {
+    public static final String RECIPE_KEY = "RECIPE_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        Recipe recipe = getIntent().getParcelableExtra(Intent.EXTRA_UID);
+        Recipe recipe = getIntent().getParcelableExtra(RECIPE_KEY);
         setTitle(recipe.getName());
 
         //Setting the recipe for the shared viewmodel so the fragments can access it
