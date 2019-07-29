@@ -19,6 +19,11 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.ViewHo
 
     private List<Step> mSteps;
 
+    public void setSteps(List<Step> steps) {
+        mSteps = steps;
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -37,10 +42,10 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.item_number)
-        TextView mIdView;
-        @BindView(R.id.content)
-        TextView mContentView;
+        @BindView(R.id.tv_step_id)
+        TextView mIdTextView;
+        @BindView(R.id.tv_step_description)
+        TextView mDescriptionView;
 
         public ViewHolder(View view) {
             super(view);
@@ -48,8 +53,8 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.ViewHo
         }
 
         void bindView(Step step) {
-            //mIdView.setText(mValues.get(position).id);
-            //mContentView.setText(mValues.get(position).content);
+            mIdTextView.setText(step.getId()+".");
+            mDescriptionView.setText(step.getShortDescription());
         }
 
     }

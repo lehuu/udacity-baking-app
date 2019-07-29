@@ -65,6 +65,7 @@ public class StepListFragment extends Fragment {
         mViewModel.getRecipe().observe(getViewLifecycleOwner(), recipe -> {
             servingsTextView.setText(getString(R.string.servings, recipe.getServings()));
             ingredientsTextView.setText(recipe.getIngredientString());
+            mAdapter.setSteps(recipe.getSteps());
         });
 
     }
