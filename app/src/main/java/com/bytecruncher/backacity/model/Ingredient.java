@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.text.DecimalFormat;
+
 public class Ingredient implements Parcelable {
     private float quantity;
     private String measure;
@@ -31,7 +33,7 @@ public class Ingredient implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return quantity + " " + measure + " of " + ingredient;
+        return ingredient + " (" + new DecimalFormat("#.##").format(quantity) + " " + measure + ")";
     }
 
     @Override

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Backacity</string>
     <string name="servings">Servings: %d</string>
+    <string name="ingredients">Ingredients</string>
 </resources>
