@@ -37,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
             //Open the detail of the clicked Recipe
             if(mMainViewModel.getRecipes().getValue() != null) {
                 Recipe recipe = mMainViewModel.getRecipes().getValue().get(position);
-                Intent intent = new Intent(this, RecipeDetailActivity.class);
-                intent.putExtra(Intent.EXTRA_UID, recipe);
-                startActivity(intent);
+                Intent recipeDetailIntent = new Intent(this, RecipeDetailActivity.class);
+                recipeDetailIntent.putExtra(Intent.EXTRA_UID, recipe);
+                startActivity(recipeDetailIntent);
             }
         });
 
