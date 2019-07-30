@@ -1,6 +1,7 @@
 package com.bytecruncher.backacity.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bytecruncher.backacity.R;
+import com.bytecruncher.backacity.model.Recipe;
 import com.bytecruncher.backacity.viewmodel.RecipeDetailViewModel;
 
 import butterknife.BindView;
@@ -52,6 +54,15 @@ public class StepListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_steplist, container, false);
         ButterKnife.bind(this, view);
         mAdapter = new StepListAdapter();
+        mAdapter.setOnItemClickListener(position -> {
+            if(mViewModel.getRecipe().getValue() != null) {
+                Recipe recipe = mViewModel.getRecipe().getValue();
+                Intent stepDetailIntent = new Intent(getContext(), StepDetailActivity.class);
+                stepDetailIntent.putExtra(StepDetailActivity.RECIPE_KEY, recipe);
+                stepDetailIntent.putExtra(StepDetailActivity.STEP_KEY, position);
+                startActivity(stepDetailIntent);
+            }
+        });
         stepListRecyclerView.setAdapter(mAdapter);
 
         return view;
