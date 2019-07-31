@@ -1,10 +1,12 @@
 package com.bytecruncher.backacity.ui;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,14 @@ import android.widget.TextView;
 import com.bytecruncher.backacity.R;
 import com.bytecruncher.backacity.model.Step;
 import com.bytecruncher.backacity.viewmodel.RecipeDetailViewModel;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,10 +31,13 @@ import butterknife.ButterKnife;
 public class StepDetailFragment extends Fragment {
     public static final String STEP_KEY = "STEP_KEY";
 
-    private RecipeDetailViewModel mViewModel;
-
     @BindView(R.id.tv_step_description)
     TextView mDescriptionTextView;
+    @BindView(R.id.pv_step_video)
+    PlayerView mVideoPlayerView;
+
+    private RecipeDetailViewModel mViewModel;
+    private ExoPlayer mExoPlayer;
 
     public static StepDetailFragment newInstance(Step step) {
         StepDetailFragment fragment = new StepDetailFragment();
@@ -42,17 +55,54 @@ public class StepDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.step_detail_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        if(getArguments() != null) {
+        mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+
+        if (getArguments() != null) {
             Step step = getArguments().getParcelable(STEP_KEY);
-            mDescriptionTextView.setText(step.getDescription());
+            mViewModel.setStep(step);
         }
+
+        mViewModel.getStep().observe(getViewLifecycleOwner(), step -> {
+            mDescriptionTextView.setText(step.getDescription());
+            initializeVideoPlayer();
+        });
 
         return view;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onPause() {
+        super.onPause();
+        releaseVideoPlayer();
+    }
+
+    /**
+     * Initialize the exoplayer
+     */
+    private void initializeVideoPlayer() {
+        Step step = mViewModel.getStep().getValue();
+        if (mExoPlayer == null && step != null && step.getVideoURL().length() > 0) {
+
+            mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext());
+            mVideoPlayerView.setPlayer(mExoPlayer);
+
+            Uri mediaUri = Uri.parse(step.getVideoURL());
+            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), getString(R.string.app_name)));
+            MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaUri);
+            mExoPlayer.prepare(videoSource);
+            mVideoPlayerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * Release ExoPlayer.
+     */
+    private void releaseVideoPlayer() {
+        if (mExoPlayer != null) {
+            mExoPlayer.stop();
+            mExoPlayer.release();
+            mExoPlayer = null;
+        }
     }
 
 }
