@@ -35,6 +35,7 @@ public class StepListFragment extends Fragment {
 
     private StepListAdapter mAdapter;
     private RecipeDetailViewModel mViewModel;
+    private Boolean mTwoPane;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,14 +54,21 @@ public class StepListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_steplist, container, false);
         ButterKnife.bind(this, view);
+        mTwoPane = getResources().getBoolean(R.bool.two_pane);
+
         mAdapter = new StepListAdapter();
         mAdapter.setOnItemClickListener(position -> {
-            if(mViewModel.getRecipe().getValue() != null) {
-                Recipe recipe = mViewModel.getRecipe().getValue();
-                Intent stepDetailIntent = new Intent(getContext(), StepDetailActivity.class);
-                stepDetailIntent.putExtra(StepDetailActivity.RECIPE_KEY, recipe);
-                stepDetailIntent.putExtra(StepDetailActivity.STEP_KEY, position);
-                startActivity(stepDetailIntent);
+            Recipe recipe = mViewModel.getRecipe().getValue();
+
+            if(recipe != null) {
+                if(mTwoPane) {
+                    mViewModel.setStep(recipe.getSteps().get(position));
+                } else {
+                    Intent stepDetailIntent = new Intent(getContext(), StepDetailActivity.class);
+                    stepDetailIntent.putExtra(StepDetailActivity.RECIPE_KEY, recipe);
+                    stepDetailIntent.putExtra(StepDetailActivity.STEP_KEY, position);
+                    startActivity(stepDetailIntent);
+                }
             }
         });
         stepListRecyclerView.setAdapter(mAdapter);
@@ -78,17 +86,5 @@ public class StepListFragment extends Fragment {
             ingredientsTextView.setText(recipe.getIngredientString());
             mAdapter.setSteps(recipe.getSteps());
         });
-
     }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
 }

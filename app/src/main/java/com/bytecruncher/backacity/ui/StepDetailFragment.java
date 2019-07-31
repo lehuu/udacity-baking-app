@@ -38,6 +38,7 @@ public class StepDetailFragment extends Fragment {
 
     private RecipeDetailViewModel mViewModel;
     private ExoPlayer mExoPlayer;
+    private Boolean mTwoPane;
 
     public static StepDetailFragment newInstance(Step step) {
         StepDetailFragment fragment = new StepDetailFragment();
@@ -54,20 +55,28 @@ public class StepDetailFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.step_detail_fragment, container, false);
         ButterKnife.bind(this, view);
+        mTwoPane = getResources().getBoolean(R.bool.two_pane);
+        return view;
+    }
 
-        mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
-
-        if (getArguments() != null) {
-            Step step = getArguments().getParcelable(STEP_KEY);
-            mViewModel.setStep(step);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (mTwoPane)
+            mViewModel = ViewModelProviders.of(getActivity()).get(RecipeDetailViewModel.class);
+        else {
+            mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+            if (getArguments() != null) {
+                Step step = getArguments().getParcelable(STEP_KEY);
+                mViewModel.setStep(step);
+            }
         }
 
         mViewModel.getStep().observe(getViewLifecycleOwner(), step -> {
             mDescriptionTextView.setText(step.getDescription());
+            releaseVideoPlayer();
             initializeVideoPlayer();
         });
-
-        return view;
     }
 
     @Override
@@ -102,6 +111,7 @@ public class StepDetailFragment extends Fragment {
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
+            mVideoPlayerView.setVisibility(View.GONE);
         }
     }
 
