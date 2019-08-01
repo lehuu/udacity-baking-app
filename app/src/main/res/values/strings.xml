@@ -3,4 +3,5 @@
     <string name="servings">Servings: %d</string>
     <string name="ingredients">Ingredients</string>
     <string name="arrow">\u003E</string>
+    <string name="add_to_widget">Add to widget</string>
 </resources>

@@ -6,30 +6,32 @@ import android.content.Context;
 import android.widget.RemoteViews;
 
 import com.bytecruncher.backacity.R;
+import com.bytecruncher.backacity.model.Recipe;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class RecipeWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    static void updateAppWidgets(Context context, AppWidgetManager appWidgetManager,
+                                 int[] appWidgetId) {
 
-        CharSequence widgetText = "Test";
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
-        views.setTextViewText(R.id.appwidget_text, widgetText);
+        Recipe recipe = WidgetPrefs.loadRecipe(context);
 
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        if(recipe != null) {
+            // Construct the RemoteViews object
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
+            views.setTextViewText(R.id.appwidget_text, recipe.getName());
+
+            // Instruct the widget manager to update the widget
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+        }
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
-        }
+        updateAppWidgets(context, appWidgetManager, appWidgetIds);
     }
 
     @Override
