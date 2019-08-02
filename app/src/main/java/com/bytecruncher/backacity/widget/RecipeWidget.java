@@ -1,5 +1,6 @@
 package com.bytecruncher.backacity.widget;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.widget.RemoteViews;
 
 import com.bytecruncher.backacity.R;
 import com.bytecruncher.backacity.model.Recipe;
+import com.bytecruncher.backacity.ui.RecipeDetailActivity;
 
 /**
  * Implementation of App Widget functionality.
@@ -28,6 +30,13 @@ public class RecipeWidget extends AppWidgetProvider {
             //Bind remote adapter
             Intent listIntent = new Intent(context, RecipeWidgetService.class);
             views.setRemoteAdapter(R.id.widget_ingredient_list, listIntent);
+
+            //Set the pendingIntent to open the detailed Recipe on click
+            Intent intent = new Intent(context, RecipeDetailActivity.class);
+            intent.putExtra(RecipeDetailActivity.RECIPE_KEY, recipe);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+            views.setPendingIntentTemplate(R.id.widget_ingredient_list, pendingIntent);
 
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views);

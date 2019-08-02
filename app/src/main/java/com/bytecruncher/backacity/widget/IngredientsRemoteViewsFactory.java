@@ -1,12 +1,15 @@
 package com.bytecruncher.backacity.widget;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.bytecruncher.backacity.R;
 import com.bytecruncher.backacity.model.Ingredient;
 import com.bytecruncher.backacity.model.Recipe;
+import com.bytecruncher.backacity.ui.MainActivity;
 
 import java.util.List;
 
@@ -48,6 +51,10 @@ public class IngredientsRemoteViewsFactory implements RemoteViewsService.RemoteV
 
         rv.setTextViewText(R.id.tv_widget_ingredient_name, ingredient.toString());
 
+        /**
+         * Set a fillIn Intent to open the PendingIntent set in {@link RecipeWidget#updateAppWidgets(Context, AppWidgetManager, int[])}
+         */
+        rv.setOnClickFillInIntent(R.id.tv_widget_ingredient_name, new Intent());
         return rv;
     }
 
