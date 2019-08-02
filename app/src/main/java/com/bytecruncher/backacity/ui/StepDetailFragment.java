@@ -80,6 +80,12 @@ public class StepDetailFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        initializeVideoPlayer();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         releaseVideoPlayer();
@@ -90,8 +96,9 @@ public class StepDetailFragment extends Fragment {
      */
     private void initializeVideoPlayer() {
         Step step = mViewModel.getStep().getValue();
-        if (mExoPlayer == null && step != null && step.getVideoURL().length() > 0) {
-
+        if (step == null)
+            return;
+        if (mExoPlayer == null && step.getVideoURL().length() > 0) {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(getContext());
             mVideoPlayerView.setPlayer(mExoPlayer);
 
@@ -100,6 +107,8 @@ public class StepDetailFragment extends Fragment {
             MediaSource videoSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mediaUri);
             mExoPlayer.prepare(videoSource);
             mVideoPlayerView.setVisibility(View.VISIBLE);
+        } else if (step.getVideoURL().length() == 0) {
+            mVideoPlayerView.setVisibility(View.GONE);
         }
     }
 
@@ -111,7 +120,6 @@ public class StepDetailFragment extends Fragment {
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
-            mVideoPlayerView.setVisibility(View.GONE);
         }
     }
 
