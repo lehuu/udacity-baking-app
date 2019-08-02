@@ -9,6 +9,7 @@ import android.widget.RemoteViews;
 
 import com.bytecruncher.backacity.R;
 import com.bytecruncher.backacity.model.Recipe;
+import com.bytecruncher.backacity.ui.MainActivity;
 import com.bytecruncher.backacity.ui.RecipeDetailActivity;
 
 /**
@@ -20,10 +21,10 @@ public class RecipeWidget extends AppWidgetProvider {
                                  int[] appWidgetId) {
 
         Recipe recipe = WidgetPrefs.loadRecipe(context);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
 
         if(recipe != null) {
             // Construct the RemoteViews object
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
             views.setTextViewText(R.id.widget_recipe_name, recipe.getName());
             views.setTextViewText(R.id.widget_recipe_servings, context.getString(R.string.servings_widget, recipe.getServings()));
 
@@ -41,6 +42,12 @@ public class RecipeWidget extends AppWidgetProvider {
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_ingredient_list);
+        } else {
+            //if no recipe is available we open the MainActivity on widget click
+            Intent intent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+            appWidgetManager.updateAppWidget(appWidgetId, views);
         }
     }
 
