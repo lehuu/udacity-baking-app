@@ -33,7 +33,7 @@ public class Ingredient implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return ingredient + " (" + new DecimalFormat("#.##").format(quantity) + " " + measure + ")";
+        return ingredient + " (" + new DecimalFormat("#.##").format(quantity) + "\u00A0" + measure + ")";
     }
 
     @Override
