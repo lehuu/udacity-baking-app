@@ -53,7 +53,7 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.tv_step_id)
         TextView mIdTextView;
-        @BindView(R.id.tv_step_description)
+        @BindView(R.id.tv_step_short_description)
         TextView mDescriptionView;
 
         public ViewHolder(View view) {
