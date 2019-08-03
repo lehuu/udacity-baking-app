@@ -15,7 +15,7 @@ import com.bytecruncher.backacity.viewmodel.RecipeDetailViewModel;
 import com.bytecruncher.backacity.widget.RecipeWidgetService;
 
 public class RecipeDetailActivity extends AppCompatActivity {
-    public static final String RECIPE_KEY = "RECIPE_KEY";
+    public static final String RECIPE_KEY = "RECIPE_DETAIL_KEY";
 
     private RecipeDetailViewModel mViewModel;
 

@@ -15,7 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StepDetailActivity extends AppCompatActivity {
-    public static final String RECIPE_KEY = "RECIPE_KEY";
+    public static final String RECIPE_KEY = "RECIPE_STEP_DETAIL_KEY";
     public static final String STEP_KEY = "STEP_KEY";
 
     @BindView(R.id.layout_tab)
