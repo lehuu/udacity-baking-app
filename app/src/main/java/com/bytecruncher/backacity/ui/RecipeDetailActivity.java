@@ -3,6 +3,7 @@ package com.bytecruncher.backacity.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,17 @@ public class RecipeDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_detail);
 
         Recipe recipe = getIntent().getParcelableExtra(RECIPE_KEY);
+        setTitle(recipe.getName());
+
+        //Setting the recipe for the shared viewmodel so the fragments can access it
+        mViewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+        mViewModel.setRecipe(recipe);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Recipe recipe = intent.getParcelableExtra(RECIPE_KEY);
         setTitle(recipe.getName());
 
         //Setting the recipe for the shared viewmodel so the fragments can access it
