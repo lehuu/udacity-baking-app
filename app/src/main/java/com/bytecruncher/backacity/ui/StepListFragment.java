@@ -30,7 +30,7 @@ public class StepListFragment extends Fragment {
     TextView servingsTextView;
     @BindView(R.id.tv_ingredients)
     TextView ingredientsTextView;
-    @BindView(R.id.tv_steps)
+    @BindView(R.id.rv_steps)
     RecyclerView stepListRecyclerView;
 
     private StepListAdapter mAdapter;
